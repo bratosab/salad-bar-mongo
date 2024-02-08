@@ -1,5 +1,6 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { Topping } from 'src/topping/schemas/topping.schema';
 
 export type SaladDocument = HydratedDocument<Salad>;
 
@@ -11,8 +12,18 @@ export class Salad {
   @Prop()
   dressing: string;
 
-  @Prop([String])
-  toppings: string[];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Topping' }] })
+  toppings: Topping[];
+
+  // @Prop(
+  //   raw([
+  //     {
+  //       name: { type: String },
+  //       price: { type: Number },
+  //     },
+  //   ]),
+  // )
+  // toppings: Record<string, any>[];
 
   @Prop()
   price: number;
